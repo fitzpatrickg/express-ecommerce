@@ -6,10 +6,26 @@ const productSchema = new Schema({
     required: true,
     trim: true,
   },
-  description: {
-    type: String,
-    required: true,
-    trim: true,
+  details: {
+    shortDescription: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    longDescription: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    color: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    bullets: {
+      type: Array,
+      required: true,
+    },
   },
   price: {
     type: Number,
