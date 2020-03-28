@@ -1,7 +1,7 @@
+/* eslint-disable prefer-const */
 // creates database, collections and documents with fake data - invoked with npm run seed
 
-/* eslint-disable prefer-const */
-const faker = require('faker'); // generates fake data
+const faker = require('faker');
 const Product = require('../models/product');
 const Category = require('../models/category');
 
@@ -10,8 +10,8 @@ require('../mongoose');
 const categoryMap = new Map();
 
 // generates fake data for the products collection
-for (let i = 0; i < 20; i++) {
-  const bullets = [];
+for (let i = 0; i < 8000; i++) {
+  let bullets = [];
 
   // generate bullet point list
   for (let j = 0; j < 3; j++) {
@@ -39,6 +39,7 @@ for (let i = 0; i < 20; i++) {
       color: faker.commerce.color(),
       bullets,
     },
+    category: bullets[2],
   });
 
   p.save((err) => {
@@ -47,7 +48,7 @@ for (let i = 0; i < 20; i++) {
 }
 
 // see number of products in each category
-console.log(categoryMap);
+console.log('*** Categories and the number of products in them ***\n', categoryMap);
 
 const categoryList = Array.from(categoryMap.keys());
 
