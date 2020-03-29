@@ -20,6 +20,7 @@ const cartItemSchema = new mongoose.Schema({
   },
 });
 
+// calculate total price before save
 cartItemSchema.pre('save', function () {
   this.price = this.individualPrice * this.quantity;
 });
