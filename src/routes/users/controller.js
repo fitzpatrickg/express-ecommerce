@@ -5,6 +5,7 @@ const router = new express.Router();
 
 router.get('/:id/cart', (req, res) => {
   model.getCartById(req.params.id)
+    .lean()
     .then((cart) => res.status(200).send(cart))
     .catch((err) => res.status(500).send(err));
 });

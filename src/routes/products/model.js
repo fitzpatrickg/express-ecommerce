@@ -1,11 +1,11 @@
 const Product = require('../../database/models/product');
 
 function getAllProducts() {
-  return Product.find();
+  return Product.find().lean();
 }
 
 function getProductById(id) {
-  return Product.findById(id);
+  return Product.findById(id).lean();
 }
 
 function createProduct(name, details, price, image) {
