@@ -8,9 +8,11 @@ const Category = require('../models/category');
 require('../mongoose');
 
 const categoryMap = new Map();
+// if number argument not supplied in command, use default 10 [example: 'npm seed 100']
+const numberOfProducts = parseInt(process.argv[2]) || 10;
 
 // generates fake data for the products collection
-for (let i = 0; i < 8000; i++) {
+for (let i = 0; i < numberOfProducts; i++) {
   let bullets = [];
 
   // generate bullet point list
