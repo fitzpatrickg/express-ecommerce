@@ -1,6 +1,7 @@
 // TODO add user schema
 const { Schema } = require('mongoose');
 const validator = require('validator');
+const bcrypt = require('bcryptjs');
 const cartItemSchema = require('./cartItem');
 
 const userSchema = new Schema({
@@ -34,6 +35,22 @@ const userSchema = new Schema({
     // },
   },
   cart: [cartItemSchema],
+});
+
+// middleware for encrypting passwords
+userSchema.pre('save', function (next) {
+  const user = this;
+
+  if (user.isModified('password')) {
+    bcrypt.hash(user.password, 8)
+      .then((encryptedPassword) => {
+        user.password = encryptedPassword;
+        next();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 });
 
 module.exports = userSchema;

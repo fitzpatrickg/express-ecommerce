@@ -3,6 +3,15 @@ const model = require('./model');
 
 const router = new express.Router();
 
+const User = require('../../database/models/user');
+
+router.post('/', (req, res) => {
+  new User(req.body)
+    .save()
+    .then((result) => res.status(200).send(result))
+    .catch((err) => res.status(500).send(err));
+});
+
 router.get('/:id/cart', (req, res) => {
   model.getCartById(req.params.id)
     .lean()
