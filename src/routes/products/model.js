@@ -10,7 +10,7 @@ function getProductById(id) {
 
 function createProduct(name, details, price, image) {
   return new Promise((resolve, reject) => {
-    new Product({
+    const product = new Product({
       name,
       details: {
         shortDescription: details.shortDescription,
@@ -28,7 +28,7 @@ function createProduct(name, details, price, image) {
         if (err) {
           reject(new Error(err));
         }
-        resolve('successfully saved');
+        resolve(product);
       });
   });
 }

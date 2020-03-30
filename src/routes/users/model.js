@@ -30,6 +30,7 @@ function addToCart(id, productToAdd) {
   });
 }
 
+// find cart by user and return only the cart
 function getCartById(id) {
   return User.findById(id)
     .select({ cart: 1 });
@@ -49,6 +50,7 @@ function emptyCart(id) {
   });
 }
 
+// finds index of product to be deleted in cart, and deletes the product
 function deleteItemFromCart(userId, productId) {
   return new Promise((resolve, reject) => {
     User.findById(userId)
