@@ -2,7 +2,9 @@
 const { Schema } = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const cartItemSchema = require('./cartItem');
+const User = require('../models/user');
 
 const userSchema = new Schema({
   name: {
@@ -35,6 +37,10 @@ const userSchema = new Schema({
     // },
   },
   cart: [cartItemSchema],
+  tokens: {
+    type: Array,
+    required: false,
+  },
 });
 
 // middleware for encrypting passwords
@@ -52,5 +58,38 @@ userSchema.pre('save', function (next) {
       });
   }
 });
+
+userSchema.methods.generateAuthToken = function () {
+  const user = this;
+  const token = jwt.sign({ _id: user._id.toString() }, 'carolbaskinkilledherhusband');
+
+  user.tokens = user.tokens.concat({ token });
+
+  user.save()
+    .then(() => token)
+    .catch((err) => err);
+};
+
+userSchema.statics.findByCredentials = function (email, password) {
+  let user = null;
+
+  User.findOne({ email })
+    .then((foundUser) => {
+      if (!user) {
+        throw new Error('Unable to login');
+      }
+      user = foundUser;
+      return bcrypt.compare(password, user.password);
+    })
+    .then((isMatch) => {
+      if (!isMatch) {
+        throw new Error('Unable to login');
+      }
+      return user;
+    })
+    .catch((err) => {
+      throw new Error('Unable to login', err);
+    });
+};
 
 module.exports = userSchema;
