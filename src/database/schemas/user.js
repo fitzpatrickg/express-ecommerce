@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cartItemSchema = require('./cartItem');
 const User = require('../models/user');
+require('dotenv').config();
 
 const userSchema = new Schema({
   name: {
@@ -61,7 +62,7 @@ userSchema.pre('save', function (next) {
 
 userSchema.methods.generateAuthToken = function () {
   const user = this;
-  const token = jwt.sign({ _id: user._id.toString() }, 'carolbaskinkilledherhusband');
+  const token = jwt.sign({ _id: user._id.toString() }, process.env.AUTH_SECRET);
 
   user.tokens = user.tokens.concat({ token });
 

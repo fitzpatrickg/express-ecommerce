@@ -6,20 +6,20 @@ const router = new express.Router();
 
 const User = require('../../database/models/user');
 
+// authenticates and logs in user
 router.post('/login', (req, res) => {
-  User.findByCredentials(req.body.email, req.body.password)
+  const { email, password } = req.body;
+  model.authenticateUser(email, password)
     .then((user) => {
-      user.generateAuthToken()
-        .then((token) => {
-          res.status(200).send(token);
-        })
-        .catch((err) => {
-          res.status(401).send(err);
-        });
+      console.log(req);
+      res.status(200).send(user);
     })
-    .catch((err) => {
-      res.status(401).send(err);
-    });
+    .catch((err) => res.status(401).send(err));
+});
+
+// gets logged in user profile
+router.get('/me', auth, (req, res) => {
+  res.status(200).send(req.user);
 });
 
 // create new user
@@ -31,7 +31,7 @@ router.post('/', (req, res) => {
 });
 
 // get user cart
-router.get('/:id/cart', (req, res) => {
+router.get('/:id/cart', auth, (req, res) => {
   model.getCartById(req.params.id)
     .lean()
     .then((cart) => res.status(200).send(cart))

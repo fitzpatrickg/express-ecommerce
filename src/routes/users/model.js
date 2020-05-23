@@ -1,5 +1,31 @@
+const bcrypt = require('bcryptjs');
 const User = require('../../database/models/user');
 const CartItem = require('../../database/models/cartItem');
+
+function authenticateUser(email, password) {
+  let authenticatedUser = null;
+
+  return new Promise((resolve, reject) => {
+    User.findOne({ email })
+      .then((user) => {
+        if (!user) {
+          reject(new Error('no user found'));
+        }
+        authenticatedUser = user;
+        return bcrypt.compare(password, user.password);
+      })
+      .then((isMatch) => {
+        if (!isMatch || authenticatedUser === null) {
+          reject(new Error('unable to login'));
+        }
+        return authenticatedUser.generateAuthToken();
+      })
+      .then((token) => {
+        resolve({ authenticatedUser, token });
+      })
+      .catch((err) => reject(err));
+  });
+}
 
 function addToCart(id, productToAdd) {
   return new Promise((resolve, reject) => {
@@ -73,4 +99,5 @@ module.exports = {
   getCartById,
   emptyCart,
   deleteItemFromCart,
+  authenticateUser,
 };
