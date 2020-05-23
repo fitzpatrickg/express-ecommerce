@@ -7,3 +7,4 @@ The faker file contains the code that runs using the `npm run seed` and `npm run
 - add jwt authentication for users
 - add get product by category route
 - change product to contain category id instead of category name
+- implement loremflickr into faker (eg https://loremflickr.com/320/240/dog)
